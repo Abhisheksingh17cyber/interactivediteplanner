@@ -686,6 +686,15 @@ async function downloadPDF(planId) {
     }
     
     try {
+        // Check if we're in demo mode
+        if (window.demoBackend) {
+            // Show demo message for PDF download
+            showDemoMessage('PDF Download', 
+                'In the full version, this would download a professionally formatted PDF with your complete diet plan, meal schedules, shopping lists, and nutrition breakdown.',
+                planId);
+            return;
+        }
+        
         // Create download link
         const downloadUrl = `/api/pdf/diet-plan/${planId}`;
         
@@ -715,6 +724,13 @@ async function previewPDF(planId) {
     }
     
     try {
+        // Check if we're in demo mode
+        if (window.demoBackend) {
+            // Show demo preview
+            showDemoPreview(planId);
+            return;
+        }
+        
         // Open PDF preview in new window
         const previewUrl = `/api/pdf/preview/${planId}`;
         window.open(previewUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
@@ -725,6 +741,60 @@ async function previewPDF(planId) {
     } catch (error) {
         console.error('Error previewing PDF:', error);
         showErrorMessage('Failed to preview PDF. Please try again.');
+    }
+}
+
+// Demo functions
+function showDemoMessage(title, message, planId) {
+    const modal = document.createElement('div');
+    modal.className = 'demo-modal';
+    modal.innerHTML = `
+        <div class="demo-modal-content">
+            <div class="demo-modal-header">
+                <h3>🎯 ${title} - Demo Mode</h3>
+                <button class="demo-close" onclick="this.closest('.demo-modal').remove()">&times;</button>
+            </div>
+            <div class="demo-modal-body">
+                <p>${message}</p>
+                <div class="demo-features">
+                    <h4>Full Version PDF Includes:</h4>
+                    <ul>
+                        <li>✅ Professional cover page with branding</li>
+                        <li>✅ Complete user profile and goals</li>
+                        <li>✅ Detailed nutrition summary</li>
+                        <li>✅ 7-day meal plan with recipes</li>
+                        <li>✅ Organized shopping list</li>
+                        <li>✅ Progress tracking templates</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="demo-modal-footer">
+                <button onclick="this.closest('.demo-modal').remove()">Close</button>
+                <button onclick="showDemoPreview('${planId}')">View Plan Details</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    trackEvent('demo_pdf_download_attempted', { planId });
+}
+
+function showDemoPreview(planId) {
+    // Remove existing modals
+    document.querySelectorAll('.demo-modal').forEach(modal => modal.remove());
+    
+    // Get plan data from demo backend
+    if (window.demoBackend && window.demoBackend.currentPlanId) {
+        const plan = window.demoBackend.dietPlans.get(window.demoBackend.currentPlanId);
+        const user = window.demoBackend.users.get(window.demoBackend.currentUserId);
+        
+        if (plan && user) {
+            const modal = document.createElement('div');
+            modal.className = 'demo-modal demo-preview';
+            modal.innerHTML = generateDemoPreviewContent(plan, user);
+            document.body.appendChild(modal);
+            trackEvent('demo_pdf_preview_shown', { planId });
+        }
     }
 }
 
@@ -758,6 +828,88 @@ function createAnotherPlan() {
     
     // Track event
     trackEvent('create_another_plan_clicked');
+}
+
+function generateDemoPreviewContent(plan, user) {
+    return `
+        <div class="demo-modal-content demo-pdf-preview">
+            <div class="demo-modal-header">
+                <h3>📄 Diet Plan Preview - ${plan.name}</h3>
+                <button class="demo-close" onclick="this.closest('.demo-modal').remove()">&times;</button>
+            </div>
+            <div class="demo-modal-body">
+                <div class="pdf-preview-content">
+                    <div class="pdf-section">
+                        <h4>User Profile</h4>
+                        <div class="profile-grid">
+                            <div><strong>Name:</strong> ${user.fullName || 'Demo User'}</div>
+                            <div><strong>Age:</strong> ${user.age || 'N/A'} years</div>
+                            <div><strong>Goal:</strong> ${user.primaryGoal?.replace('_', ' ') || 'N/A'}</div>
+                            <div><strong>BMR:</strong> ${user.bmr || 'N/A'} kcal/day</div>
+                        </div>
+                    </div>
+                    
+                    <div class="pdf-section">
+                        <h4>Daily Targets</h4>
+                        <div class="targets-grid">
+                            <div class="target-box">
+                                <span class="target-value">${plan.goals.dailyCalories}</span>
+                                <span class="target-label">Calories</span>
+                            </div>
+                            <div class="target-box">
+                                <span class="target-value">${plan.goals.macroTargets.protein}g</span>
+                                <span class="target-label">Protein</span>
+                            </div>
+                            <div class="target-box">
+                                <span class="target-value">${plan.goals.macroTargets.carbs}g</span>
+                                <span class="target-label">Carbs</span>
+                            </div>
+                            <div class="target-box">
+                                <span class="target-value">${plan.goals.macroTargets.fats}g</span>
+                                <span class="target-label">Fats</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pdf-section">
+                        <h4>Sample Week - Monday</h4>
+                        ${generateSampleDayPreview(plan.weeklyPlan[0] || plan.weeklyPlan.find(d => d.day === 'monday'))}
+                    </div>
+                    
+                    <div class="pdf-section">
+                        <h4>Shopping List Preview</h4>
+                        <div class="shopping-preview">
+                            ${plan.shoppingList.slice(0, 6).map(item => 
+                                `<div class="shopping-item">• ${item.name} - ${Math.round(item.quantity)}${item.unit}</div>`
+                            ).join('')}
+                            ${plan.shoppingList.length > 6 ? `<div class="shopping-more">...and ${plan.shoppingList.length - 6} more items</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="demo-modal-footer">
+                <button onclick="this.closest('.demo-modal').remove()">Close Preview</button>
+                <button onclick="showDemoMessage('PDF Download', 'Complete PDF with all 7 days, recipes, and detailed instructions would be downloaded in the full version.', '${plan.id}')">Download Full PDF</button>
+            </div>
+        </div>
+    `;
+}
+
+function generateSampleDayPreview(dayPlan) {
+    if (!dayPlan) return '<p>No meal plan available</p>';
+    
+    return `
+        <div class="day-preview">
+            ${Object.entries(dayPlan.meals).map(([mealType, meal]) => `
+                <div class="meal-preview">
+                    <h5>${mealType.charAt(0).toUpperCase() + mealType.slice(1)} - ${meal.nutrition.calories} kcal</h5>
+                    <div class="meal-foods">
+                        ${meal.foods.map(food => `<span class="food-item">${food.name} (${food.quantity}${food.unit})</span>`).join(', ')}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
 }
 
 // Export functions for other modules

@@ -946,3 +946,227 @@ a:hover {
         font-size: var(--fs-base);
     }
 }
+
+/* Demo Modal Styles */
+.demo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    backdrop-filter: blur(5px);
+}
+
+.demo-modal-content {
+    background: var(--primary-white);
+    border-radius: 12px;
+    max-width: 600px;
+    max-height: 80vh;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.demo-preview .demo-modal-content {
+    max-width: 800px;
+    max-height: 90vh;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.demo-modal-header {
+    background: var(--primary-black);
+    color: var(--primary-white);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.demo-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.demo-close {
+    background: none;
+    border: none;
+    color: var(--primary-white);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.demo-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.demo-modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.demo-features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.demo-features li {
+    padding: 8px 0;
+    color: var(--text-dark);
+}
+
+.demo-modal-footer {
+    padding: 20px;
+    border-top: 1px solid var(--light-grey);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.demo-modal-footer button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.demo-modal-footer button:first-child {
+    background: var(--secondary-grey);
+    color: var(--primary-white);
+}
+
+.demo-modal-footer button:last-child {
+    background: var(--primary-black);
+    color: var(--primary-white);
+}
+
+.demo-modal-footer button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* PDF Preview Styles */
+.pdf-preview-content {
+    font-family: 'Inter', sans-serif;
+}
+
+.pdf-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--light-grey);
+}
+
+.pdf-section:last-child {
+    border-bottom: none;
+}
+
+.pdf-section h4 {
+    color: var(--primary-black);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.targets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.target-box {
+    text-align: center;
+    padding: 15px;
+    background: var(--light-grey);
+    border-radius: 8px;
+}
+
+.target-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-black);
+}
+
+.target-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--secondary-grey);
+    margin-top: 5px;
+    text-transform: uppercase;
+}
+
+.day-preview {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.meal-preview {
+    margin-bottom: 15px;
+}
+
+.meal-preview h5 {
+    margin: 0 0 8px 0;
+    color: var(--primary-black);
+    font-size: 0.95rem;
+}
+
+.meal-foods {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+}
+
+.food-item {
+    background: var(--primary-white);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.shopping-preview {
+    columns: 2;
+    column-gap: 20px;
+    font-size: 0.9rem;
+}
+
+.shopping-item {
+    margin-bottom: 8px;
+    break-inside: avoid;
+}
+
+.shopping-more {
+    font-style: italic;
+    color: var(--secondary-grey);
+    margin-top: 10px;
+}
