@@ -1,0 +1,461 @@
+/* ====================================
+   RESPONSIVE STYLES
+   Mobile-First Responsive Design
+   ==================================== */
+
+/* Tablet Styles (768px and up) */
+@media (min-width: 768px) {
+    /* Navigation */
+    .nav-menu {
+        display: flex;
+    }
+    
+    .nav-toggle {
+        display: none;
+    }
+    
+    /* Hero Section */
+    .hero-title {
+        font-size: var(--fs-5xl);
+    }
+    
+    .hero-description {
+        font-size: var(--fs-lg);
+    }
+    
+    .hero-features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Progress Steps */
+    .progress-steps {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .step-title {
+        display: block;
+    }
+    
+    /* Form Grid */
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .form-grid.three-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Radio and Checkbox Groups */
+    .radio-group {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .radio-group.activity-selection {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkbox-group {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Form Navigation */
+    .form-navigation {
+        flex-direction: row;
+    }
+    
+    /* Success Actions */
+    .success-actions {
+        flex-direction: row;
+    }
+    
+    /* Footer */
+    .footer-content {
+        grid-template-columns: repeat(3, 1fr);
+        text-align: left;
+    }
+}
+
+/* Desktop Styles (1024px and up) */
+@media (min-width: 1024px) {
+    /* Hero Section */
+    .hero {
+        padding: 140px 0 100px;
+    }
+    
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    /* Form Container */
+    .form-wrapper {
+        max-width: 1000px;
+    }
+    
+    /* Form Grid */
+    .form-grid {
+        gap: var(--spacing-2xl);
+    }
+    
+    /* Radio Groups */
+    .radio-group.goal-selection {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Checkbox Groups */
+    .checkbox-group {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* Feature Cards */
+    .hero-features {
+        gap: var(--spacing-2xl);
+    }
+}
+
+/* Large Desktop Styles (1200px and up) */
+@media (min-width: 1200px) {
+    /* Container */
+    .container {
+        max-width: 1300px;
+    }
+    
+    /* Hero Title */
+    .hero-title {
+        font-size: 4.5rem;
+    }
+    
+    /* Form Wrapper */
+    .form-wrapper {
+        max-width: 1100px;
+    }
+    
+    /* Checkbox Groups */
+    .checkbox-group.preferences {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+/* Mobile Specific Styles */
+@media (max-width: 767px) {
+    /* Typography */
+    h1 { font-size: var(--fs-3xl); }
+    h2 { font-size: var(--fs-2xl); }
+    h3 { font-size: var(--fs-xl); }
+    
+    /* Spacing Adjustments */
+    .hero {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-content {
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    /* Navigation */
+    .nav-container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    .nav-logo h1 {
+        font-size: var(--fs-xl);
+    }
+    
+    /* Progress Steps Mobile */
+    .progress-steps {
+        grid-template-columns: repeat(6, 1fr);
+        gap: var(--spacing-xs);
+    }
+    
+    .step {
+        padding: var(--spacing-sm);
+    }
+    
+    .step-number {
+        width: 24px;
+        height: 24px;
+        font-size: var(--fs-xs);
+    }
+    
+    .step-title {
+        font-size: 0.65rem;
+    }
+    
+    /* Form Adjustments */
+    .step-header h2 {
+        font-size: var(--fs-xl);
+    }
+    
+    .step-header p {
+        font-size: var(--fs-base);
+    }
+    
+    /* Radio Options Mobile */
+    .radio-option label {
+        padding: var(--spacing-md);
+    }
+    
+    .radio-option label i {
+        font-size: var(--fs-lg);
+    }
+    
+    .activity-title {
+        font-size: var(--fs-sm);
+    }
+    
+    .activity-desc {
+        font-size: var(--fs-xs);
+    }
+    
+    /* Button Adjustments */
+    .cta-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .nav-btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    /* Success Section Mobile */
+    .success-content {
+        padding: var(--spacing-2xl);
+    }
+    
+    .success-icon {
+        font-size: 3rem;
+    }
+}
+
+/* Small Mobile Styles (480px and down) */
+@media (max-width: 480px) {
+    /* Base Font Size Adjustment */
+    html {
+        font-size: 14px;
+    }
+    
+    /* Spacing Reductions */
+    .hero {
+        padding: 80px 0 40px;
+    }
+    
+    .form-container {
+        padding: var(--spacing-xl) 0;
+    }
+    
+    /* Progress Bar Mobile */
+    .progress-container {
+        padding: var(--spacing-lg);
+    }
+    
+    .progress-steps {
+        gap: 2px;
+    }
+    
+    .step {
+        padding: var(--spacing-xs);
+    }
+    
+    .step-number {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+    
+    .step-title {
+        display: none;
+    }
+    
+    /* Form Mobile */
+    .diet-form {
+        padding: var(--spacing-lg);
+    }
+    
+    .step-header {
+        margin-bottom: var(--spacing-lg);
+        padding-bottom: var(--spacing-md);
+    }
+    
+    .form-grid {
+        gap: var(--spacing-lg);
+    }
+    
+    /* Input Adjustments */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--fs-sm);
+    }
+    
+    /* Radio and Checkbox Mobile */
+    .radio-group,
+    .checkbox-group {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+    
+    .radio-option label,
+    .checkbox-option label {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--fs-sm);
+    }
+    
+    /* Navigation Mobile */
+    .form-navigation {
+        margin-top: var(--spacing-xl);
+        padding-top: var(--spacing-md);
+        gap: var(--spacing-sm);
+    }
+    
+    .nav-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--fs-sm);
+    }
+    
+    /* Footer Mobile */
+    .footer {
+        padding: var(--spacing-2xl) 0 var(--spacing-lg);
+    }
+    
+    .footer-content {
+        gap: var(--spacing-lg);
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* Landscape Mobile Styles */
+@media (max-width: 767px) and (orientation: landscape) {
+    .hero {
+        padding: 60px 0 40px;
+        min-height: 50vh;
+    }
+    
+    .form-container {
+        padding: var(--spacing-lg) 0;
+    }
+    
+    .progress-container {
+        padding: var(--spacing-md);
+    }
+    
+    .diet-form {
+        padding: var(--spacing-md);
+    }
+    
+    .step-header {
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .header,
+    .nav-toggle,
+    .form-navigation,
+    .loading-overlay,
+    .footer {
+        display: none !important;
+    }
+    
+    .form-container {
+        background: white !important;
+        box-shadow: none !important;
+    }
+    
+    .diet-form {
+        box-shadow: none !important;
+        border: 1px solid #ccc;
+    }
+    
+    .form-step {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+    
+    .step-header {
+        border-bottom: 2px solid #000;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .loading-spinner {
+        border-width: 2px;
+    }
+    
+    .progress-bar {
+        height: 6px;
+    }
+    
+    .step-number {
+        border-width: 2px;
+    }
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .loading-spinner {
+        animation: none;
+    }
+    
+    .form-step {
+        transition: none;
+    }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-white: #1a1a1a;
+        --primary-black: #ffffff;
+        --off-white: #2a2a2a;
+        --light-grey: #3a3a3a;
+        --medium-grey: #a8a8a8;
+        --dark-grey: #d1d1d1;
+        --accent-grey: #4a4a4a;
+    }
+}
+
+/* Container Queries (Future Enhancement) */
+@container (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Focus Visible for Better Accessibility */
+@media (any-hover: hover) {
+    .nav-link:hover,
+    .cta-button:hover,
+    .nav-btn:hover {
+        transform: translateY(-1px);
+    }
+}
+
+/* Touch Device Optimizations */
+@media (any-hover: none) {
+    .nav-btn,
+    .cta-button {
+        min-height: 44px;
+    }
+    
+    .radio-option label,
+    .checkbox-option label {
+        min-height: 44px;
+    }
+    
+    .form-group input,
+    .form-group select {
+        min-height: 44px;
+    }
+}

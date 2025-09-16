@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTERNITY DIET PLANNER - Personalized Nutrition Plans</title>
+    <meta name="description" content="Get your personalized diet plan with INTERNITY DIET PLANNER. Professional nutrition planning with downloadable PDF reports.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="public/css/styles.css">
+    <link rel="stylesheet" href="public/css/form.css">
+    <link rel="stylesheet" href="public/css/responsive.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 id="loadingText">Processing your information...</h3>
+            <p id="loadingSubtext">Creating your personalized diet plan</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>INTERNITY DIET PLANNER</h1>
+                    <span class="tagline">Personalized Nutrition Solutions</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                </div>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Transform Your Health with <span class="highlight">Personalized Nutrition</span></h1>
+                <p class="hero-description">Get a professionally crafted diet plan tailored specifically to your goals, preferences, and lifestyle. Download your complete nutrition guide as a PDF.</p>
+                <button class="cta-button" onclick="startPlanCreation()">
+                    <i class="fas fa-play"></i>
+                    Start Your Diet Plan
+                </button>
+            </div>
+            <div class="hero-features">
+                <div class="feature-card">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Professional Plans</h3>
+                    <p>Scientifically designed meal plans</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-download"></i>
+                    <h3>PDF Download</h3>
+                    <p>Get your complete plan as PDF</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Mobile Friendly</h3>
+                    <p>Access anywhere, anytime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-Step Form Container -->
+    <div id="formContainer" class="form-container hidden">
+        <div class="form-wrapper">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-title">Personal Info</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-title">Physical Data</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-title">Goals</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-title">Diet Preferences</span>
+                    </div>
+                    <div class="step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-title">Health Info</span>
+                    </div>
+                    <div class="step" data-step="6">
+                        <span class="step-number">6</span>
+                        <span class="step-title">Lifestyle</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="dietPlanForm" class="diet-form">
+                <!-- Step 1: Personal Information -->
+                <div class="form-step active" data-step="1">
+                    <div class="step-header">
+                        <h2><i class="fas fa-user"></i> Personal Information</h2>
+                        <p>Let's start with some basic information about you</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age *</label>
+                            <input type="number" id="age" name="age" min="18" max="100" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                            <span class="error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Physical Measurements -->
+                <div class="form-step" data-step="2">
+                    <div class="step-header">
+                        <h2><i class="fas fa-weight"></i> Physical Measurements</h2>
+                        <p>Help us understand your current physical state</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="currentWeight">Current Weight *</label>
+                            <div class="input-group">
+                                <input type="number" id="currentWeight" name="currentWeight" step="0.1" required>
+                                <select id="weightUnit" name="weightUnit">
+                                    <option value="kg">kg</option>
+                                    <option value="lbs">lbs</option>
+                                </select>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height *</label>
+                            <div class="input-group">
+                                <input type="number" id="height" name="height" step="0.1" required>
+                                <select id="heightUnit" name="heightUnit">
+                                    <option value="cm">cm</option>
+                                    <option value="ft">ft</option>
+                                </select>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="bodyFat">Body Fat Percentage (Optional)</label>
+                            <input type="number" id="bodyFat" name="bodyFat" step="0.1" min="5" max="50">
+                            <span class="helper-text">If you know your body fat percentage</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="waistCircumference">Waist Circumference</label>
+                            <div class="input-group">
+                                <input type="number" id="waistCircumference" name="waistCircumference" step="0.1">
+                                <span class="unit">cm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="hipCircumference">Hip Circumference</label>
+                            <div class="input-group">
+                                <input type="number" id="hipCircumference" name="hipCircumference" step="0.1">
+                                <span class="unit">cm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Goals & Timeline -->
+                <div class="form-step" data-step="3">
+                    <div class="step-header">
+                        <h2><i class="fas fa-target"></i> Goals & Timeline</h2>
+                        <p>What do you want to achieve and when?</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="primaryGoal">Primary Goal *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="weightLoss" name="primaryGoal" value="weight_loss" required>
+                                    <label for="weightLoss">
+                                        <i class="fas fa-arrow-down"></i>
+                                        <span>Weight Loss</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="weightGain" name="primaryGoal" value="weight_gain" required>
+                                    <label for="weightGain">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>Weight Gain</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="muscleBuilding" name="primaryGoal" value="muscle_building" required>
+                                    <label for="muscleBuilding">
+                                        <i class="fas fa-dumbbell"></i>
+                                        <span>Muscle Building</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="maintenance" name="primaryGoal" value="maintenance" required>
+                                    <label for="maintenance">
+                                        <i class="fas fa-balance-scale"></i>
+                                        <span>Maintenance</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="targetWeight">Target Weight</label>
+                            <div class="input-group">
+                                <input type="number" id="targetWeight" name="targetWeight" step="0.1">
+                                <span class="unit" id="targetWeightUnit">kg</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeline">Timeline *</label>
+                            <select id="timeline" name="timeline" required>
+                                <option value="">Select Timeline</option>
+                                <option value="1_month">1 Month</option>
+                                <option value="3_months">3 Months</option>
+                                <option value="6_months">6 Months</option>
+                                <option value="1_year">1 Year</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="activityLevel">Activity Level *</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="sedentary" name="activityLevel" value="sedentary" required>
+                                    <label for="sedentary">
+                                        <span class="activity-title">Sedentary</span>
+                                        <span class="activity-desc">Little to no exercise</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="lightlyActive" name="activityLevel" value="lightly_active" required>
+                                    <label for="lightlyActive">
+                                        <span class="activity-title">Lightly Active</span>
+                                        <span class="activity-desc">Light exercise 1-3 days/week</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="moderatelyActive" name="activityLevel" value="moderately_active" required>
+                                    <label for="moderatelyActive">
+                                        <span class="activity-title">Moderately Active</span>
+                                        <span class="activity-desc">Moderate exercise 3-5 days/week</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="veryActive" name="activityLevel" value="very_active" required>
+                                    <label for="veryActive">
+                                        <span class="activity-title">Very Active</span>
+                                        <span class="activity-desc">Hard exercise 6-7 days/week</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="extremelyActive" name="activityLevel" value="extremely_active" required>
+                                    <label for="extremelyActive">
+                                        <span class="activity-title">Extremely Active</span>
+                                        <span class="activity-desc">Very hard exercise, physical job</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Dietary Preferences -->
+                <div class="form-step" data-step="4">
+                    <div class="step-header">
+                        <h2><i class="fas fa-utensils"></i> Dietary Preferences</h2>
+                        <p>Tell us about your food preferences and restrictions</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="dietType">Diet Type *</label>
+                            <select id="dietType" name="dietType" required>
+                                <option value="">Select Diet Type</option>
+                                <option value="non_vegetarian">Non-Vegetarian</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="keto">Ketogenic</option>
+                                <option value="mediterranean">Mediterranean</option>
+                                <option value="paleo">Paleo</option>
+                                <option value="intermittent_fasting">Intermittent Fasting</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="mealFrequency">Meal Frequency *</label>
+                            <select id="mealFrequency" name="mealFrequency" required>
+                                <option value="">Select Frequency</option>
+                                <option value="3_meals">3 Main Meals</option>
+                                <option value="4_meals">4 Meals (3 main + 1 snack)</option>
+                                <option value="5_meals">5-6 Small Meals</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="foodAllergies">Food Allergies/Intolerances</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="dairy" name="foodAllergies" value="dairy">
+                                    <label for="dairy">Dairy</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="gluten" name="foodAllergies" value="gluten">
+                                    <label for="gluten">Gluten</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="nuts" name="foodAllergies" value="nuts">
+                                    <label for="nuts">Nuts</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="seafood" name="foodAllergies" value="seafood">
+                                    <label for="seafood">Seafood</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="eggs" name="foodAllergies" value="eggs">
+                                    <label for="eggs">Eggs</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="soy" name="foodAllergies" value="soy">
+                                    <label for="soy">Soy</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="foodsToAvoid">Foods to Avoid (Optional)</label>
+                            <textarea id="foodsToAvoid" name="foodsToAvoid" rows="3" placeholder="List any specific foods you want to avoid..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="preferredCuisines">Preferred Cuisine Types</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="indian" name="preferredCuisines" value="indian">
+                                    <label for="indian">Indian</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="mediterranean" name="preferredCuisines" value="mediterranean">
+                                    <label for="mediterranean">Mediterranean</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="asian" name="preferredCuisines" value="asian">
+                                    <label for="asian">Asian</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="american" name="preferredCuisines" value="american">
+                                    <label for="american">American</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="italian" name="preferredCuisines" value="italian">
+                                    <label for="italian">Italian</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="mexican" name="preferredCuisines" value="mexican">
+                                    <label for="mexican">Mexican</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="waterIntake">Daily Water Intake Goal</label>
+                            <div class="input-group">
+                                <input type="number" id="waterIntake" name="waterIntake" step="0.1" value="2.5">
+                                <span class="unit">liters</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Health Information -->
+                <div class="form-step" data-step="5">
+                    <div class="step-header">
+                        <h2><i class="fas fa-heartbeat"></i> Health Information</h2>
+                        <p>Help us create a safe and effective plan for you</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="medicalConditions">Medical Conditions</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="diabetes" name="medicalConditions" value="diabetes">
+                                    <label for="diabetes">Diabetes</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="hypertension" name="medicalConditions" value="hypertension">
+                                    <label for="hypertension">High Blood Pressure</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="pcos" name="medicalConditions" value="pcos">
+                                    <label for="pcos">PCOS</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="thyroid" name="medicalConditions" value="thyroid">
+                                    <label for="thyroid">Thyroid Issues</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="heartDisease" name="medicalConditions" value="heart_disease">
+                                    <label for="heartDisease">Heart Disease</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="noConditions" name="medicalConditions" value="none">
+                                    <label for="noConditions">None</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="currentMedications">Current Medications (Optional)</label>
+                            <textarea id="currentMedications" name="currentMedications" rows="3" placeholder="List any medications you're currently taking..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="dietExperience">Previous Diet Experience</label>
+                            <select id="dietExperience" name="dietExperience">
+                                <option value="">Select Experience</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="some_experience">Some Experience</option>
+                                <option value="experienced">Experienced</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sleepHours">Average Sleep Hours</label>
+                            <select id="sleepHours" name="sleepHours">
+                                <option value="">Select Hours</option>
+                                <option value="less_than_5">Less than 5 hours</option>
+                                <option value="5_to_6">5-6 hours</option>
+                                <option value="6_to_7">6-7 hours</option>
+                                <option value="7_to_8">7-8 hours</option>
+                                <option value="more_than_8">More than 8 hours</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="stressLevel">Stress Level</label>
+                            <select id="stressLevel" name="stressLevel">
+                                <option value="">Select Level</option>
+                                <option value="low">Low</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="high">High</option>
+                                <option value="very_high">Very High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Lifestyle Factors -->
+                <div class="form-step" data-step="6">
+                    <div class="step-header">
+                        <h2><i class="fas fa-clock"></i> Lifestyle Factors</h2>
+                        <p>Tell us about your daily routine and preferences</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="workSchedule">Work Schedule *</label>
+                            <select id="workSchedule" name="workSchedule" required>
+                                <option value="">Select Schedule</option>
+                                <option value="regular">Regular (9-5)</option>
+                                <option value="shift_work">Shift Work</option>
+                                <option value="flexible">Flexible</option>
+                                <option value="night_shift">Night Shift</option>
+                                <option value="freelancer">Freelancer</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cookingSkills">Cooking Skills *</label>
+                            <select id="cookingSkills" name="cookingSkills" required>
+                                <option value="">Select Level</option>
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate">Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="mealPrepTime">Time Available for Meal Prep</label>
+                            <select id="mealPrepTime" name="mealPrepTime">
+                                <option value="">Select Time</option>
+                                <option value="minimal">Minimal (15-30 min/day)</option>
+                                <option value="moderate">Moderate (30-60 min/day)</option>
+                                <option value="flexible">Flexible (1-2 hours/day)</option>
+                                <option value="extensive">Extensive (2+ hours/day)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budgetPreference">Budget Preference</label>
+                            <select id="budgetPreference" name="budgetPreference">
+                                <option value="">Select Budget</option>
+                                <option value="low">Budget-Friendly</option>
+                                <option value="medium">Moderate</option>
+                                <option value="high">Premium</option>
+                                <option value="no_limit">No Limit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exerciseRoutine">Current Exercise Routine</label>
+                            <textarea id="exerciseRoutine" name="exerciseRoutine" rows="3" placeholder="Describe your current exercise routine (optional)..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="specialRequests">Special Requests/Notes</label>
+                            <textarea id="specialRequests" name="specialRequests" rows="4" placeholder="Any additional information or special requests..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="form-navigation">
+                    <button type="button" id="prevBtn" class="nav-btn prev-btn" style="display: none;">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <button type="button" id="nextBtn" class="nav-btn next-btn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button type="submit" id="submitBtn" class="nav-btn submit-btn" style="display: none;">
+                        <i class="fas fa-rocket"></i>
+                        Generate My Diet Plan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Section -->
+    <div id="successSection" class="success-section hidden">
+        <div class="success-container">
+            <div class="success-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Your Diet Plan is Ready!</h2>
+                <p>We've created a personalized nutrition plan just for you. Your comprehensive diet plan includes meal schedules, recipes, shopping lists, and nutrition guidance.</p>
+                <div class="success-actions">
+                    <button id="downloadPdfBtn" class="cta-button">
+                        <i class="fas fa-download"></i>
+                        Download PDF Plan
+                    </button>
+                    <button id="createAnotherBtn" class="secondary-btn">
+                        <i class="fas fa-plus"></i>
+                        Create Another Plan
+                    </button>
+                </div>
+                <div class="plan-preview" id="planPreview">
+                    <!-- Plan preview will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>INTERNITY DIET PLANNER</h3>
+                    <p>Professional nutrition planning for a healthier you.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-envelope"></i> info@internitydietplanner.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Health Street, Wellness City</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 INTERNITY DIET PLANNER. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="public/js/form-validation.js"></script>
+    <script src="public/js/form-navigation.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/api.js"></script>
+</body>
+</html>
