@@ -491,7 +491,7 @@ if (DEMO_CONFIG.enableDemo) {
         delay: (ms) => new Promise(resolve => setTimeout(resolve, ms))
     };
     
-    // Show demo mode indicator
+    // Show demo mode indicator and ensure proper initialization
     document.addEventListener('DOMContentLoaded', () => {
         const demoIndicator = document.createElement('div');
         demoIndicator.innerHTML = `
@@ -520,6 +520,15 @@ if (DEMO_CONFIG.enableDemo) {
             </style>
         `;
         document.body.appendChild(demoIndicator);
+        
+        // Ensure loading overlay is hidden in demo mode
+        setTimeout(() => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay && loadingOverlay.style.display !== 'none') {
+                loadingOverlay.style.display = 'none';
+                console.log('🎯 Demo mode: Loading overlay hidden');
+            }
+        }, 2000);
     });
 }
 

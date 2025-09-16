@@ -584,14 +584,22 @@ const apiCache = new APICache();
 
 // Initialize API system
 document.addEventListener('DOMContentLoaded', function() {
-    // Perform initial health check
+    // Check if we're in demo mode (GitHub Pages)
+    const isDemoMode = window.location.hostname.includes('github.io') || window.demoBackend;
+    
+    if (isDemoMode) {
+        console.log('🎯 DEMO MODE ENABLED - Using simulated backend');
+        return; // Skip real health checks in demo mode
+    }
+    
+    // Perform initial health check (only for real backend)
     performHealthCheck().then(isHealthy => {
         if (!isHealthy) {
             console.warn('Backend health check failed');
         }
     });
     
-    // Setup periodic health checks
+    // Setup periodic health checks (only for real backend)
     setInterval(() => {
         performHealthCheck();
     }, 60000); // Every minute

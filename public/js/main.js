@@ -37,6 +37,11 @@ function initializeApp() {
     // Initialize weight unit sync
     initializeUnitSync();
     
+    // Hide loading overlay after initialization
+    setTimeout(() => {
+        hideLoadingOverlay();
+    }, 1500);
+    
     console.log('INTERNITY DIET PLANNER initialized successfully');
 }
 
