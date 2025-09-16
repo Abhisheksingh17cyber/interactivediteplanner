@@ -453,8 +453,16 @@ function showSuccessSection(planData) {
     
     // Set up download button
     const downloadBtn = document.getElementById('downloadPdfBtn');
-    if (downloadBtn && planData.pdfUrl) {
-        downloadBtn.onclick = () => downloadPDF(planData.pdfUrl);
+    if (downloadBtn && planData.planId) {
+        downloadBtn.onclick = () => downloadPDF(planData.planId);
+        downloadBtn.disabled = false;
+    }
+    
+    // Set up preview button
+    const previewBtn = document.getElementById('previewPdfBtn');
+    if (previewBtn && planData.planId) {
+        previewBtn.onclick = () => previewPDF(planData.planId);
+        previewBtn.disabled = false;
     }
     
     // Set up create another button
@@ -463,40 +471,62 @@ function showSuccessSection(planData) {
         createAnotherBtn.onclick = createAnotherPlan;
     }
     
+    // Store plan data for future use
+    localStorage.setItem('currentPlanId', planData.planId);
+    localStorage.setItem('currentUserId', planData.userId);
+    
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function generatePlanPreview(planData) {
+    const plan = planData.plan || {};
+    const dailyCalories = plan.goals?.dailyCalories || 'N/A';
+    const macroTargets = plan.goals?.macroTargets || {};
+    
     return `
         <div class="plan-summary">
             <h3><i class="fas fa-chart-pie"></i> Your Plan Summary</h3>
             <div class="summary-grid">
                 <div class="summary-item">
                     <span class="label">Daily Calories:</span>
-                    <span class="value">${planData.dailyCalories} kcal</span>
+                    <span class="value">${dailyCalories} kcal</span>
                 </div>
                 <div class="summary-item">
                     <span class="label">Protein:</span>
-                    <span class="value">${planData.macros.protein}g</span>
+                    <span class="value">${macroTargets.protein || 'N/A'}g</span>
                 </div>
                 <div class="summary-item">
                     <span class="label">Carbs:</span>
-                    <span class="value">${planData.macros.carbs}g</span>
+                    <span class="value">${macroTargets.carbs || 'N/A'}g</span>
                 </div>
                 <div class="summary-item">
                     <span class="label">Fats:</span>
-                    <span class="value">${planData.macros.fats}g</span>
+                    <span class="value">${macroTargets.fats || 'N/A'}g</span>
+                </div>
+            </div>
+            <div class="metabolic-info">
+                <h4>Your Metabolic Profile:</h4>
+                <div class="metabolic-grid">
+                    <div class="metabolic-item">
+                        <span class="label">BMR:</span>
+                        <span class="value">${planData.bmr || 'N/A'} kcal/day</span>
+                    </div>
+                    <div class="metabolic-item">
+                        <span class="label">TDEE:</span>
+                        <span class="value">${planData.tdee || 'N/A'} kcal/day</span>
+                    </div>
                 </div>
             </div>
             <div class="plan-features">
                 <h4>Your Plan Includes:</h4>
                 <ul>
-                    <li><i class="fas fa-check"></i> 7-day meal plan with recipes</li>
-                    <li><i class="fas fa-check"></i> Detailed shopping list</li>
-                    <li><i class="fas fa-check"></i> Meal timing schedule</li>
-                    <li><i class="fas fa-check"></i> Nutrition breakdown</li>
-                    <li><i class="fas fa-check"></i> Progress tracking template</li>
+                    <li><i class="fas fa-check"></i> 7-day personalized meal plan</li>
+                    <li><i class="fas fa-check"></i> Detailed shopping list organized by category</li>
+                    <li><i class="fas fa-check"></i> Complete nutrition breakdown</li>
+                    <li><i class="fas fa-check"></i> Meal preparation instructions</li>
+                    <li><i class="fas fa-check"></i> Progress tracking templates</li>
+                    <li><i class="fas fa-check"></i> Professional PDF document</li>
                 </ul>
             </div>
         </div>
@@ -648,6 +678,88 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// PDF Functions
+async function downloadPDF(planId) {
+    if (!planId) {
+        showErrorMessage('No plan ID available for PDF download');
+        return;
+    }
+    
+    try {
+        // Create download link
+        const downloadUrl = `/api/pdf/diet-plan/${planId}`;
+        
+        // Create temporary link element
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'INTERNITY_Diet_Plan.pdf';
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Track event
+        trackEvent('pdf_downloaded', { planId: planId });
+        
+    } catch (error) {
+        console.error('Error downloading PDF:', error);
+        showErrorMessage('Failed to download PDF. Please try again.');
+    }
+}
+
+async function previewPDF(planId) {
+    if (!planId) {
+        showErrorMessage('No plan ID available for PDF preview');
+        return;
+    }
+    
+    try {
+        // Open PDF preview in new window
+        const previewUrl = `/api/pdf/preview/${planId}`;
+        window.open(previewUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        
+        // Track event
+        trackEvent('pdf_previewed', { planId: planId });
+        
+    } catch (error) {
+        console.error('Error previewing PDF:', error);
+        showErrorMessage('Failed to preview PDF. Please try again.');
+    }
+}
+
+function createAnotherPlan() {
+    // Reset form and go back to step 1
+    const form = document.getElementById('dietPlanForm');
+    if (form) {
+        form.reset();
+    }
+    
+    // Clear stored data
+    clearFormData();
+    localStorage.removeItem('currentPlanId');
+    localStorage.removeItem('currentUserId');
+    
+    // Reset UI
+    currentStep = 1;
+    showStep(1);
+    updateProgressDisplay();
+    updateNavigationButtons();
+    
+    // Show form, hide success
+    const formContainer = document.getElementById('formContainer');
+    const successSection = document.getElementById('successSection');
+    
+    formContainer.classList.remove('hidden');
+    successSection.classList.add('hidden');
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Track event
+    trackEvent('create_another_plan_clicked');
+}
+
 // Export functions for other modules
 window.DietPlanner = {
     startPlanCreation,
@@ -655,5 +767,8 @@ window.DietPlanner = {
     hideLoadingOverlay,
     trackEvent,
     formatCurrency,
-    formatDate
+    formatDate,
+    downloadPDF,
+    previewPDF,
+    createAnotherPlan
 };

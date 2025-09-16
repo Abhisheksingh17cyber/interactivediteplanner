@@ -14,11 +14,32 @@ const fs = require('fs');
 require('dotenv').config();
 
 // Import routes and middleware
-const dietPlanRoutes = require('./src/api/dietPlanRoutes');
-const pdfRoutes = require('./src/api/pdfRoutes');
-const validationRoutes = require('./src/api/validationRoutes');
-const { errorHandler, notFound } = require('./src/api/middleware/errorMiddleware');
-const logger = require('./src/utils/logger');
+const apiRoutes = require('./src/routes/api');
+const pdfRoutes = require('./src/routes/pdf');
+
+// Create simple logger if not exists
+const logger = {
+    info: (message, meta) => console.log(`[INFO] ${message}`, meta ? JSON.stringify(meta) : ''),
+    error: (message, meta) => console.error(`[ERROR] ${message}`, meta ? JSON.stringify(meta) : ''),
+    warn: (message, meta) => console.warn(`[WARN] ${message}`, meta ? JSON.stringify(meta) : '')
+};
+
+// Simple middleware
+const notFound = (req, res, next) => {
+    const error = new Error(`Not Found - ${req.originalUrl}`);
+    res.status(404);
+    next(error);
+};
+
+const errorHandler = (err, req, res, next) => {
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    res.status(statusCode);
+    res.json({
+        success: false,
+        message: err.message,
+        stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
+    });
+};
 
 // Initialize Express app
 const app = express();
@@ -109,6 +130,10 @@ async function connectDatabase() {
         
         logger.info('Connected to MongoDB successfully');
         
+        // Initialize food database with sample data
+        const { initializeFoodDatabase } = require('./src/utils/initializeDatabase');
+        await initializeFoodDatabase();
+        
         // Set up database event listeners
         mongoose.connection.on('error', (err) => {
             logger.error('MongoDB connection error:', err);
@@ -129,9 +154,8 @@ async function connectDatabase() {
 }
 
 // API Routes
-app.use('/api/diet-plan', dietPlanRoutes);
+app.use('/api', apiRoutes);
 app.use('/api/pdf', pdfRoutes);
-app.use('/api/validate', validationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

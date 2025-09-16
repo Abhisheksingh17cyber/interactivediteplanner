@@ -7,10 +7,13 @@
 const API_CONFIG = {
     baseURL: window.location.origin,
     endpoints: {
-        submitPlan: '/api/diet-plan',
-        downloadPDF: '/api/download-pdf',
-        validateEmail: '/api/validate-email',
-        healthCheck: '/api/health'
+        createUser: '/api/user',
+        generatePlan: '/api/generate',
+        downloadPDF: '/api/pdf/diet-plan',
+        previewPDF: '/api/pdf/preview',
+        healthCheck: '/api/health',
+        searchFoods: '/api/foods/search',
+        getMealSuggestions: '/api/meals/suggestions'
     },
     timeout: 30000, // 30 seconds
     retryAttempts: 3
@@ -142,10 +145,10 @@ async function submitDietPlan(formData) {
         // Prepare data for submission
         const submissionData = prepareSubmissionData(formData);
         
-        updateLoadingProgress('Calculating your nutritional needs...', 30);
+        updateLoadingProgress('Creating your profile...', 20);
 
-        // Submit to backend
-        const response = await apiClient.makeRequest(API_CONFIG.endpoints.submitPlan, {
+        // First create/update user
+        const userResponse = await apiClient.makeRequest('/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -153,22 +156,53 @@ async function submitDietPlan(formData) {
             body: JSON.stringify(submissionData)
         });
 
-        if (response.success) {
-            updateLoadingProgress('Generating your personalized meal plan...', 60);
-            
-            // Simulate additional processing time for better UX
-            await apiClient.delay(2000);
-            
-            updateLoadingProgress('Creating your PDF document...', 80);
-            await apiClient.delay(1500);
-            
-            updateLoadingProgress('Finalizing your diet plan...', 95);
-            await apiClient.delay(1000);
-
-            return response;
-        } else {
-            throw new Error(response.error || 'Failed to generate diet plan');
+        if (!userResponse.success) {
+            throw new Error(userResponse.error || 'Failed to save user profile');
         }
+
+        updateLoadingProgress('Calculating your nutritional needs...', 40);
+
+        // Generate diet plan
+        const dietPlanResponse = await apiClient.makeRequest('/api/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userResponse.data.data.userId,
+                preferences: {
+                    mealsPerDay: 3,
+                    snacksPerDay: 1
+                }
+            })
+        });
+
+        if (!dietPlanResponse.success) {
+            throw new Error(dietPlanResponse.error || 'Failed to generate diet plan');
+        }
+
+        updateLoadingProgress('Generating your personalized meal plan...', 70);
+        
+        // Simulate additional processing time for better UX
+        await apiClient.delay(1500);
+        
+        updateLoadingProgress('Finalizing your diet plan...', 95);
+        await apiClient.delay(1000);
+
+        // Store plan data for success page
+        const planData = dietPlanResponse.data.data;
+        
+        return {
+            success: true,
+            data: {
+                userId: userResponse.data.data.userId,
+                planId: planData._id,
+                plan: planData,
+                bmr: userResponse.data.data.bmr,
+                tdee: userResponse.data.data.tdee,
+                macroRatios: userResponse.data.data.macroRatios
+            }
+        };
 
     } catch (error) {
         console.error('Diet plan submission error:', error);
