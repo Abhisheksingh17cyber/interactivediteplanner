@@ -171,6 +171,197 @@ function updateNavigationButtons() {
     }
 }
 
+// Form Validation Functions
+function validateCurrentStep() {
+    const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+    if (!currentStepElement) return false;
+    
+    const requiredFields = currentStepElement.querySelectorAll('[required]');
+    let isValid = true;
+    let firstInvalidField = null;
+
+    // Clear existing error messages
+    clearAllErrorMessages(currentStepElement);
+
+    requiredFields.forEach(field => {
+        const fieldGroup = field.closest('.form-group');
+        
+        if (!validateField(field)) {
+            isValid = false;
+            
+            // Mark field group as error
+            if (fieldGroup) {
+                fieldGroup.classList.add('error');
+                
+                // Show error message
+                const errorSpan = fieldGroup.querySelector('.error-message');
+                if (errorSpan) {
+                    errorSpan.textContent = getErrorMessage(field);
+                }
+            }
+            
+            if (!firstInvalidField) {
+                firstInvalidField = field;
+            }
+        } else {
+            // Mark as success
+            if (fieldGroup) {
+                fieldGroup.classList.remove('error');
+                fieldGroup.classList.add('success');
+            }
+        }
+    });
+
+    // Focus first invalid field and show error message
+    if (!isValid && firstInvalidField) {
+        firstInvalidField.focus();
+        showErrorMessage('Please fill in all required fields correctly.');
+    }
+
+    return isValid;
+}
+
+function validateField(field) {
+    const value = field.value.trim();
+    const fieldType = field.type;
+    const fieldName = field.name;
+
+    // Check if required field is empty
+    if (field.hasAttribute('required') && !value) {
+        return false;
+    }
+
+    // Email validation
+    if (fieldType === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(value);
+    }
+
+    // Number validation
+    if (fieldType === 'number' && value) {
+        const num = parseFloat(value);
+        const min = field.getAttribute('min');
+        const max = field.getAttribute('max');
+        
+        if (isNaN(num)) return false;
+        if (min && num < parseFloat(min)) return false;
+        if (max && num > parseFloat(max)) return false;
+    }
+
+    // Radio button validation
+    if (fieldType === 'radio' && field.hasAttribute('required')) {
+        const checkedRadio = document.querySelector(`input[name="${fieldName}"]:checked`);
+        return checkedRadio !== null;
+    }
+
+    // Select validation
+    if (field.tagName === 'SELECT' && field.hasAttribute('required')) {
+        return value !== '';
+    }
+
+    return true;
+}
+
+function getErrorMessage(field) {
+    const fieldType = field.type;
+    const fieldName = field.name;
+    const min = field.getAttribute('min');
+    const max = field.getAttribute('max');
+
+    if (!field.value.trim()) {
+        return 'This field is required';
+    }
+
+    if (fieldType === 'email') {
+        return 'Please enter a valid email address';
+    }
+
+    if (fieldType === 'number') {
+        if (min && max) {
+            return `Please enter a number between ${min} and ${max}`;
+        } else if (min) {
+            return `Please enter a number greater than ${min}`;
+        } else if (max) {
+            return `Please enter a number less than ${max}`;
+        }
+        return 'Please enter a valid number';
+    }
+
+    if (fieldType === 'radio') {
+        return 'Please select an option';
+    }
+
+    if (field.tagName === 'SELECT') {
+        return 'Please make a selection';
+    }
+
+    return 'Please fill in this field correctly';
+}
+
+function clearAllErrorMessages(container) {
+    const errorGroups = container.querySelectorAll('.form-group.error');
+    errorGroups.forEach(group => {
+        group.classList.remove('error');
+        const errorMessage = group.querySelector('.error-message');
+        if (errorMessage) {
+            errorMessage.textContent = '';
+        }
+    });
+}
+
+function clearFieldError(field) {
+    const fieldGroup = field.closest('.form-group');
+    if (fieldGroup) {
+        fieldGroup.classList.remove('error');
+        const errorMessage = fieldGroup.querySelector('.error-message');
+        if (errorMessage) {
+            errorMessage.textContent = '';
+        }
+    }
+}
+
+function showErrorMessage(message) {
+    // Remove existing error messages
+    const existingError = document.querySelector('.form-error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+
+    // Create new error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'form-error-message';
+    errorDiv.style.cssText = `
+        background: #dc3545;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 24px;
+        text-align: center;
+        font-weight: 500;
+        animation: slideDown 0.3s ease;
+        box-shadow: 0 4px 20px rgba(220, 53, 69, 0.3);
+    `;
+    errorDiv.textContent = message;
+
+    // Insert at the top of the current form step
+    const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+    if (currentStepElement) {
+        const stepHeader = currentStepElement.querySelector('.step-header');
+        if (stepHeader) {
+            stepHeader.insertAdjacentElement('afterend', errorDiv);
+        } else {
+            currentStepElement.insertBefore(errorDiv, currentStepElement.firstChild);
+        }
+    }
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (errorDiv.parentNode) {
+            errorDiv.remove();
+        }
+    }, 5000);
+}
+
 // Auto-save Functionality
 function initializeAutoSave() {
     const formInputs = document.querySelectorAll('input, select, textarea');
